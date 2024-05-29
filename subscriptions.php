@@ -15,12 +15,19 @@
         ?>
         <div id="wrapper">
             <aside>
+            <?php
+                               
+                $laQuestionEnSql = "SELECT * FROM users WHERE id= '$userId' ";
+                $lesInformations = $mysqli->query($laQuestionEnSql);
+                $user = $lesInformations->fetch_assoc();
+                ?>
+
                 <img src="user.jpg" alt="Portrait de l'utilisatrice"/>
                 <section>
                     <h3>Présentation</h3>
                     <p>Sur cette page vous trouverez la liste des personnes dont
-                        l'utilisatrice
-                        n° <?php echo $userId; ?>
+                        
+                        <?php echo $user['alias']; ?>
                         suit les messages
                     </p>
 
@@ -43,13 +50,23 @@
                 $lesInformations = $mysqli->query($laQuestionEnSql);
                 // Etape 4: à vous de jouer
                 //@todo: faire la boucle while de parcours des abonnés et mettre les bonnes valeurs ci dessous 
+
+                while ($userId = $lesInformations->fetch_assoc()){
+
+                
+            
                 ?>
                 <article>
                     <img src="user.jpg" alt="blason"/>
-                    <h3>Alexandra</h3>
-                    <p>id:654</p>                    
+                    <h3><?php
+                    echo $userId['alias']?></h3>
+                    <p><?php echo $userId['id']?></p>                    
                 </article>
+            <?php
+                }
+                ?>
             </main>
         </div>
     </body>
 </html>
+            
