@@ -39,6 +39,7 @@
 
                 // Etape 1: Ouvrir une connexion avec la base de donnée.
                 $mysqli;
+                
                 //verification
                 if ($mysqli->connect_error)
                 {
@@ -56,6 +57,7 @@
                     SELECT posts.content,
                     posts.created,
                     posts.user_id,
+                    posts_tags.tag_id as tag_id,
                     users.alias as author_name,  
                     count(likes.id) as like_number,  
                     GROUP_CONCAT(DISTINCT tags.label) AS taglist 

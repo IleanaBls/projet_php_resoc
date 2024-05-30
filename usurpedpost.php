@@ -43,7 +43,7 @@ session_start();
                     /**
                      * BD
                      */
-                    $mysqli = new mysqli("localhost", "root", "root", "socialnetwork_tests");
+                    $mysqli = new mysqli("localhost", "root", "", "socialnetwork");
                     /**
                      * Récupération de la liste des auteurs
                      */
@@ -69,8 +69,8 @@ session_start();
                         // observez le résultat de cette ligne de débug (vous l'effacerez ensuite)
                         echo "<pre>" . print_r($_POST, 1) . "</pre>";
                         // et complétez le code ci dessous en remplaçant les ???
-                        $authorId = $_POST['???'];
-                        $postContent = $_POST['???'];
+                        $authorId = $_POST['alias'];
+                        $postContent = $_POST['message'];
 
 
                         //Etape 3 : Petite sécurité
@@ -100,9 +100,9 @@ session_start();
                     }
                     ?>                     
                     <form action="usurpedpost.php" method="post">
-                        <input type='hidden' name='???' value='achanger'>
+                        <input type='hidden' name=<?php $authorId ?> value='achanger'>
                         <dl>
-                            <dt><label for='auteur'>Auteur</label></dt>
+                            <dt><label for='auteur'><?php $authorId ?></label></dt>
                             <dd><select name='auteur'>
                                     <?php
                                     foreach ($listAuteurs as $id => $alias)

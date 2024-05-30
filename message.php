@@ -9,9 +9,8 @@
                         </h3>
                         <?php  $postI = $post['user_id']; 
                         ?>
-                        <a href= "wall.php?user_id=<?php echo $postI?>">
-                        <adress>par :<?php echo $post['author_name']?></adress>
-                        </a>
+                        <adress><a href= "wall.php?user_id=<?php echo $postI;?>"></adress>
+                        </a>    
                         <div>
                             <p><?php echo $post['content'] ;?></pre></p>
                         </div>
@@ -20,11 +19,16 @@
                             <?php
                                 $tags = explode(',', $post['taglist']);
                                 foreach ($tags as &$tag) {
-                                    echo "<a href='#'>#$tag</a>, ";
-                                }
-                               
+                                    
+                    ?> 
+                    <a href='http://localhost/resoc_n1/tags.php?tag_id=<?php echo $post["tag_id"]?>'>#<?php echo($tag)?></a>,
+                <?php
+            }
+            ?>
                                 
-                        ?>
+                               
+                            
+                    
                             
                         
 

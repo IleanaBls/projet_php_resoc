@@ -23,6 +23,8 @@
              * Etape 1: Le mur concerne un mot-clé en particulier
              */
             $tagId = intval($_GET['tag_id']);
+            
+
             ?>
             <?php
             /**
@@ -51,6 +53,7 @@
                     </p>
 
                 </section>
+                
             </aside>
             <main>
                 <?php
@@ -60,6 +63,8 @@
                 $laQuestionEnSql = "
                     SELECT posts.content,
                     posts.created,
+                    posts.user_id,
+                    posts_tags.tag_id as tag_id,
                     users.alias as author_name,  
                     count(likes.id) as like_number,  
                     GROUP_CONCAT(DISTINCT tags.label) AS taglist 
