@@ -7,7 +7,11 @@
                             echo $newformat;
                             ?> </datetime>
                         </h3>
-                        <address>par <?php echo $post['author_name'];?></address>
+                        <?php  $postI = $post['user_id']; 
+                        ?>
+                        <a href= "wall.php?user_id=<?php echo $postI?>">
+                        <adress>par :<?php echo $post['author_name']?></adress>
+                        </a>
                         <div>
                             <p><?php echo $post['content'] ;?></pre></p>
                         </div>
@@ -18,8 +22,11 @@
                                 foreach ($tags as &$tag) {
                                     echo "<a href='#'>#$tag</a>, ";
                                 }
-                            
+                               
+                                
                         ?>
+                            
+                        
 
                             
                         </footer>
