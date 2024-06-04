@@ -1,4 +1,7 @@
 <?php 
+$idsession = $_SESSION["connected_id"]
+session_start();
+
     include('function.php');
 ?>
 <!doctype html>

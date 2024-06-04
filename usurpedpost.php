@@ -43,7 +43,7 @@ session_start();
                     /**
                      * BD
                      */
-                    $mysqli = new mysqli("localhost", "root", "", "socialnetwork");
+                    $mysqli;
                     /**
                      * Récupération de la liste des auteurs
                      */
@@ -67,9 +67,9 @@ session_start();
                         // on ne fait ce qui suit que si un formulaire a été soumis.
                         // Etape 2: récupérer ce qu'il y a dans le formulaire @todo: c'est là que votre travaille se situe
                         // observez le résultat de cette ligne de débug (vous l'effacerez ensuite)
-                        echo "<pre>" . print_r($_POST, 1) . "</pre>";
+                        // echo "<pre>" . print_r($_POST, 1) . "</pre>";
                         // et complétez le code ci dessous en remplaçant les ???
-                        $authorId = $_POST['alias'];
+                        $authorId = $_POST['auteur'];
                         $postContent = $_POST['message'];
 
 
@@ -79,15 +79,13 @@ session_start();
                         $postContent = $mysqli->real_escape_string($postContent);
                         //Etape 4 : construction de la requete
                         $lInstructionSql = "INSERT INTO posts "
-                                . "(id, user_id, content, created, permalink, post_id) "
+                                . "(id, user_id, content, created) "
                                 . "VALUES (NULL, "
                                 . $authorId . ", "
                                 . "'" . $postContent . "', "
-                                . "NOW(), "
-                                . "'', "
-                                . "NULL);"
+                                . "NOW());"
                                 ;
-                        echo $lInstructionSql;
+                        // echo $lInstructionSql;
                         // Etape 5 : execution
                         $ok = $mysqli->query($lInstructionSql);
                         if ( ! $ok)
@@ -100,14 +98,14 @@ session_start();
                     }
                     ?>                     
                     <form action="usurpedpost.php" method="post">
-                        <input type='hidden' name=<?php $authorId ?> value='achanger'>
+                        <input type='hidden' name='auteur' value='message'>
                         <dl>
                             <dt><label for='auteur'><?php $authorId ?></label></dt>
                             <dd><select name='auteur'>
                                     <?php
-                                    foreach ($listAuteurs as $id => $alias)
+                                    foreach ($listAuteurs as $id => $alias){
                                         echo "<option value='$id'>$alias</option>";
-                                    ?>
+                                    }?>
                                 </select></dd>
                             <dt><label for='message'>Message</label></dt>
                             <dd><textarea name='message'></textarea></dd>

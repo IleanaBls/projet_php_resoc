@@ -1,4 +1,7 @@
 <?php 
+    $iddesession = session_id();
+    session_start();
+    
     include('function.php');
 ?>
 <!doctype html>

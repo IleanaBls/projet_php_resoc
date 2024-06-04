@@ -1,3 +1,4 @@
+
 <article>
                         <h3>
                             <datetime>
@@ -7,10 +8,12 @@
                             echo $newformat;
                             ?> </datetime>
                         </h3>
-                        <?php  $postI = $post['user_id']; 
+                        <?php  $postI = $post['user_id'];
                         ?>
-                        <adress><a href= "wall.php?user_id=<?php echo $postI;?>"></adress>
+                        <a href= "wall.php?user_id=<?php echo $postI?>">
+                        <adress>par :<?php echo $post['author_name']?></adress>
                         </a>    
+                        
                         <div>
                             <p><?php echo $post['content'] ;?></pre></p>
                         </div>
