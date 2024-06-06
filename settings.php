@@ -1,8 +1,7 @@
 <?php 
-    $iddesession = session_id();
-    session_start();
-    
-    include('function.php');
+$iddesession = session_id();
+session_start();
+include('function.php');
 ?>
 <!doctype html>
 <html lang="fr">
@@ -14,14 +13,11 @@
     </head>
     <body>
         <?php 
-            include ('header.php');
+        include ('header.php');
         ?>  
         <div id="wrapper" class='profile'>
-
-
             <aside>
-            <?php
-                               
+                <?php
                 $laQuestionEnSql = "SELECT * FROM users WHERE id= '$userId' ";
                 $lesInformations = $mysqli->query($laQuestionEnSql);
                 $user = $lesInformations->fetch_assoc();
@@ -30,29 +26,16 @@
                 <section>
                     <h3>Présentation</h3>
                     <p>Sur cette page vous trouverez les informations de l'utilisatrice
-                        <?php echo $user['alias'] ?></p>
-
+                        <?php echo $user['alias']; ?>
+                    </p>
                 </section>
             </aside>
+            
             <main>
                 <?php
-                /**
-                 * Etape 1: Les paramètres concernent une utilisatrice en particulier
-                 * La première étape est donc de trouver quel est l'id de l'utilisatrice
-                 * Celui ci est indiqué en parametre GET de la page sous la forme user_id=...
-                 * Documentation : https://www.php.net/manual/fr/reserved.variables.get.php
-                 * ... mais en résumé c'est une manière de passer des informations à la page en ajoutant des choses dans l'url
-                 */
                 $userId;
-
-                /**
-                 * Etape 2: se connecter à la base de donnée
-                 */
                 $mysqli;
 
-                // $laQuestionEnSql = "SELECT * FROM `users` WHERE id= '$userId' ";
-                 //* Etape 3: récupérer le nom de l'utilisateur
-                 //
                 $laQuestionEnSql = "
                     SELECT users.*, 
                     count(DISTINCT posts.id) as totalpost, 
@@ -65,19 +48,17 @@
                     WHERE users.id = '$userId' 
                     GROUP BY users.id
                     ";
+                
                 $lesInformations = $mysqli->query($laQuestionEnSql);
+                
                 if ( ! $lesInformations)
                 {
                     echo("Échec de la requete : " . $mysqli->error);
                 }
-                $user = $lesInformations->fetch_assoc();
-
-                /**
-                 * Etape 4: à vous de jouer
-                 */
-                //@todo: afficher le résultat de la ligne ci dessous, remplacer les valeurs ci-après puiseffacer la ligne ci-dessous
                 
+                $user = $lesInformations->fetch_assoc();
                 ?>                
+                
                 <article class='parameters'>
                     <h3>Mes paramètres</h3>
                     <dl>
@@ -92,7 +73,6 @@
                         <dt>Nombre de "J'aime" reçus</dt>
                         <dd><?php echo $user['totalrecieved'];?></dd>
                     </dl>
-
                 </article>
             </main>
         </div>

@@ -1,10 +1,7 @@
 <?php 
 session_start();
-    $iddesession = $_SESSION["connected_id"];
-    
-    
-    include('function.php');
-    
+
+include('function.php');
 ?>
 <!doctype html>
 <html lang="fr">
@@ -20,27 +17,11 @@ session_start();
         ?>
         <div id="wrapper">
             <?php
-            /**
-             * Etape 1: Le mur concerne un utilisateur en particulier
-             * La première étape est donc de trouver quel est l'id de l'utilisateur
-             * Celui ci est indiqué en parametre GET de la page sous la forme user_id=...
-             * Documentation : https://www.php.net/manual/fr/reserved.variables.get.php
-             * ... mais en résumé c'est une manière de passer des informations à la page en ajoutant des choses dans l'url
-             */
             $userId;
-            ?>
-            <?php
-            /**
-             * Etape 2: se connecter à la base de donnée
-             */
             $mysqli;
             ?>
-
             <aside>
                 <?php
-                /**
-                 * Etape 3: récupérer le nom de l'utilisateur
-                 */                
                 $laQuestionEnSql = "SELECT * FROM users WHERE id= '$userId' ";
                 $lesInformations = $mysqli->query($laQuestionEnSql);
                 $user = $lesInformations->fetch_assoc();
@@ -53,46 +34,47 @@ session_start();
                         <?php echo $user['alias'];?>
                     </p>
 
-                    <?php ;
+                    <?php 
+                    
                     $requete = "SELECT * FROM followers WHERE followed_user_id = '$userId' AND following_user_id = '$iddesession'";
+                    
                     $lesInformations = $mysqli->query($requete);
                     
-
                     if($lesInformations->num_rows==0){
-
                         if ($user['id'] != $iddesession ){ 
-                        ?>
-                    <form action="wall.php?user_id=<?php echo $user['id']?>" method="post">
-                    <input type='submit' name='abonnement' value="s'abonner">
-                    </form>
-                    <?php
-                    
-                        $id_followed = $user['id'];
-                        if(isset($_POST['abonnement'])){
+                            ?>
+                            <form action="wall.php?user_id=<?php echo $user['id']?>" method="post">
+                                <input type='submit' name='abonnement' value="s'abonner">
+                            </form>
                             
-                            $larequeteSql ="INSERT INTO followers "
-                            . "(id, followed_user_id, following_user_id) "
-                                . "VALUES (NULL, "
-                                . $id_followed . ", "
-                                . "'" . $iddesession . "') "
-                                ;
+                            <?php
+                            $id_followed = $user['id'];
+                            if(isset($_POST['abonnement'])){
+                                
+                                $larequeteSql ="INSERT INTO followers "
+                                . "(id, followed_user_id, following_user_id) "
+                                    . "VALUES (NULL, "
+                                    . $id_followed . ", "
+                                    . "'" . $iddesession . "') "
+                                    ;
 
-                        $ok = $mysqli->query($larequeteSql);
-                        if(! $ok){
-                            echo "echec de l'abonnement";
-                        }else{
-                            echo "tu es abonné à ". $user['alias'];
+                                $ok = $mysqli->query($larequeteSql);
+                                
+                                
+                                if(! $ok){
+                                    echo "echec de l'abonnement";
+                                }else{
+                                    echo "tu es abonné à ". $user['alias'];
+                                }
+                            }
                         }
-
-                        };
-                
-                    };
-                    }else{
-                        ?>  
-                    <form action="wall.php?user_id=<?php echo $user['id']?>" method="post">
-                    <input type='submit' name='desabonnement' value="se désabonner">
-                    </form>
-                    <?php
+                    } else
+                    {
+                ?>  
+                        <form action="wall.php?user_id=<?php echo $user['id']?>" method="post">
+                            <input type='submit' name='desabonnement' value="se désabonner">
+                        </form>
+                        <?php
                         if(isset($_POST['desabonnement'])){
                             $larequeteSql="DELETE FROM followers WHERE followed_user_id = '$userId' AND following_user_id = '$iddesession' ";
                             $ok = $mysqli->query($larequeteSql);
@@ -101,36 +83,29 @@ session_start();
                                 }else{
                                     echo "tu es désabonné de ". $user['alias'];
                                     
-                                };
-                        
-                        };
-
-                    };
+                                }
+                        }
+                    }
                     ?>
-                    
                 </section>
-
-        
-                
-                
             </aside>
+            
             <main>
                 <?php
                 if ($user['id'] == $iddesession){
-                    ?>
-                <article>
-                <h2>Poster un message</h2>
-
-                <?php 
-                $enCoursDeTraitement = isset($_POST['auteur']);
-                if ($enCoursDeTraitement)
-                {
-                    $authorId = $user['id'];
-                    $postContent = $_POST['message'];
-                    $authorId = intval($mysqli->real_escape_string($authorId));
-                    $postContent = $mysqli->real_escape_string($postContent);
-
-                    $lInstructionSql = "INSERT INTO posts "
+                ?>
+                    <article>
+                    <h2>Poster un message</h2>
+                    <?php 
+                    $enCoursDeTraitement = isset($_POST['auteur']);
+                    if ($enCoursDeTraitement)
+                    {
+                        $authorId = $user['id'];
+                        $postContent = $_POST['message'];
+                        $authorId = intval($mysqli->real_escape_string($authorId));
+                        $postContent = $mysqli->real_escape_string($postContent);
+                        
+                        $lInstructionSql = "INSERT INTO posts "
                                 . "(id, user_id, content, created) "
                                 . "VALUES (NULL, "
                                 . $authorId . ", "
@@ -138,57 +113,42 @@ session_start();
                                 . "NOW());"
                                 ;
 
-                                // var_dump($lInstructionSql);die;
-                    $ok = $mysqli->query($lInstructionSql);
+                        $ok = $mysqli->query($lInstructionSql);
+                        
                         if ( ! $ok)
-                            {
+                        {
                             echo "Impossible d'ajouter le message: " . $mysqli->error;
                         } else
-                            {
+                        {
                             echo "Message posté en tant que :" . $user['alias'];
-                            }
-                }
-
-            
-                ?>                     
+                        }
+                    } ?>                     
+                    
                     <form action="wall.php?user_id=<?php echo $user['id']?>" method="post">
                         <input type='hidden' name='auteur' value='message'>
                         <dl>
                             <dt><label for='auteur'><?php $authorId ?></label></dt>
-                            <dd><select name='auteur'>
-                                   
-                                </select></dd>
-                            <dt><label for='message'>Message</label></dt>
-                            <dd><textarea name='message'></textarea></dd>
+                            <dd>
+                                <select name='auteur'></select>
+                            </dd>
+                            <dt>
+                                <label for='message'>Message</label>
+                            </dt>
+                            <dd>
+                                <textarea name='message'></textarea>
+                            </dd>
                         </dl>
                         <input type='submit'>
                     </form>    
                 <?php
-                }
-                ?>   
+                } ?>   
                     
-                    
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-</article>
-                
+                </article>
                 <?php
                 
-                 $laQuestionEnSql = "
+                $laQuestionEnSql = "
                     SELECT posts.content, posts.created, users.alias as author_name, 
-                    posts.user_id,
+                    posts.user_id, posts.id,
                     posts_tags.tag_id as tag_id,
                     COUNT(likes.id) as like_number, GROUP_CONCAT(DISTINCT tags.label) AS taglist 
                     FROM posts
@@ -200,25 +160,18 @@ session_start();
                     GROUP BY posts.id
                     ORDER BY posts.created DESC  
                     ";
+                
                 $lesInformations = $mysqli->query($laQuestionEnSql);
+                
                 if ( ! $lesInformations)
                 {
                     echo("Échec de la requete : " . $mysqli->error);
                 }
 
-                
-
-                /**
-                 * Etape 4: @todo Parcourir les messsages et remplir correctement le HTML avec les bonnes valeurs php
-                 */
                 while ($post = $lesInformations->fetch_assoc())
                 {
-                   
-                    include('message.php');
-                 }
-                  ?>
-
-
+                   include('message.php');
+                } ?>
             </main>
         </div>
     </body>
